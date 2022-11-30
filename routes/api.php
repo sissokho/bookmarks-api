@@ -1,5 +1,6 @@
 <?php
 
+use App\Http\Controllers\Api\V1\Auth\ApiKeyRegenerationController;
 use App\Http\Controllers\Api\V1\Auth\RegistrationController;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
@@ -18,6 +19,7 @@ use Illuminate\Support\Facades\Route;
 Route::prefix('v1')->name('api.v1.')->group(function () {
     // Authentication
     Route::post('/register', RegistrationController::class)->name('register');
+    Route::post('/regenerate-api-key', ApiKeyRegenerationController::class)->name('regenerate');
 });
 
 Route::middleware('auth:sanctum')->get('/user', function (Request $request) {
