@@ -2,11 +2,11 @@
 
 namespace Tests\Feature\Auth;
 
-use App\Mail\ApiKeyGenerated;
+use App\Actions\GenerateApiKey;
 use App\Models\User;
 use Hash;
 use Illuminate\Foundation\Testing\RefreshDatabase;
-use Mail;
+use Mockery;
 use Str;
 use Tests\TestCase;
 
@@ -17,9 +17,16 @@ class RegistrationTest extends TestCase
     /** @test */
     public function user_can_create_an_account(): void
     {
+        $spy = $this->spy(GenerateApiKey::class);
+
         $user = User::factory()->make();
 
         $response = $this->postJson(route('api.v1.register'), $user->only('name', 'email', 'password'));
+
+        $spy->shouldHaveReceived('__invoke')
+            ->with(
+                Mockery::on(fn (User $argument): bool => $argument->id === $user->where('email', $user->email)->value('id'))
+            );
 
         $response
             ->assertCreated()
@@ -96,6 +103,8 @@ class RegistrationTest extends TestCase
     /** @test */
     public function password_is_hashed(): void
     {
+        $spy = $this->spy(GenerateApiKey::class);
+
         $user = User::factory()
             ->state(['password' => 'john1234'])
             ->make();
@@ -104,31 +113,12 @@ class RegistrationTest extends TestCase
 
         $newUser = User::where('email', $user->email)->sole();
 
+        $spy->shouldHaveReceived('__invoke')
+            ->with(
+                Mockery::on(fn (User $argument): bool => $argument->id === $newUser->id)
+            );
+
         $this->assertNotSame($newUser->password, 'john1234');
         $this->assertTrue(Hash::check('john1234', $newUser->password));
-    }
-
-    /** @test */
-    public function api_key_is_generated_and_sent_by_email(): void
-    {
-        Mail::fake();
-
-        $user = User::factory()->make();
-
-        $this->postJson(route('api.v1.register'), $user->only('name', 'email', 'password'));
-
-        $newUser = User::where('email', $user->email)->sole();
-
-        $this->assertDatabaseCount('personal_access_tokens', 1);
-        $this->assertDatabaseHas('personal_access_tokens', [
-            'tokenable_id' => $newUser->id,
-            'tokenable_type' => User::class,
-            'name' => 'apiKey',
-        ]);
-
-        Mail::assertQueued(
-            ApiKeyGenerated::class,
-            fn (ApiKeyGenerated $mail) => $mail->hasTo($newUser->email)
-        );
     }
 }
