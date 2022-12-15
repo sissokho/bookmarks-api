@@ -15,16 +15,9 @@ class TagPolicy
         return $tag->user()->is($user);
     }
 
-    /**
-     * Determine whether the user can update the model.
-     *
-     * @param  \App\Models\User  $user
-     * @param  \App\Models\Tag  $tag
-     * @return \Illuminate\Auth\Access\Response|bool
-     */
-    public function update(User $user, Tag $tag)
+    public function update(User $user, Tag $tag): bool
     {
-        //
+        return $this->view($user, $tag);
     }
 
     /**

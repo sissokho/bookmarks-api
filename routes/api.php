@@ -4,6 +4,7 @@ use App\Http\Controllers\Api\V1\Auth\ApiKeyRegenerationController;
 use App\Http\Controllers\Api\V1\Auth\RegistrationController;
 use App\Http\Controllers\Api\V1\Tags\ShowController as TagShowController;
 use App\Http\Controllers\Api\V1\Tags\StoreController as TagStoreController;
+use App\Http\Controllers\Api\V1\Tags\UpdateController as TagUpdateController;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
 
@@ -27,6 +28,7 @@ Route::prefix('v1')->name('api.v1.')->group(function () {
     Route::middleware('auth:sanctum')->name('tags.')->group(function () {
         Route::post('/tags', TagStoreController::class)->name('store');
         Route::get('/tags/{tag}', TagShowController::class)->name('show');
+        Route::patch('/tags/{tag}', TagUpdateController::class)->name('update');
     });
 });
 
