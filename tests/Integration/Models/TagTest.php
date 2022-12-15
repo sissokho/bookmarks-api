@@ -1,6 +1,6 @@
 <?php
 
-namespace Tests\Feature\Models;
+namespace Tests\Integration\Models;
 
 use App\Models\Tag;
 use Illuminate\Foundation\Testing\RefreshDatabase;
