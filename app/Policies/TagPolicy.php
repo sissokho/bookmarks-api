@@ -20,15 +20,8 @@ class TagPolicy
         return $this->view($user, $tag);
     }
 
-    /**
-     * Determine whether the user can delete the model.
-     *
-     * @param  \App\Models\User  $user
-     * @param  \App\Models\Tag  $tag
-     * @return \Illuminate\Auth\Access\Response|bool
-     */
-    public function delete(User $user, Tag $tag)
+    public function delete(User $user, Tag $tag): bool
     {
-        //
+        return $this->view($user, $tag);
     }
 }
