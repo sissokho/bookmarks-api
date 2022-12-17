@@ -21,6 +21,7 @@ class StoreRequest extends FormRequest
         return [
             'name' => [
                 'required',
+                'string',
                 'max:255',
                 Rule::unique('tags', 'name')->where('user_id', Auth::id()),
             ],
