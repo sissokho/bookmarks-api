@@ -3,6 +3,7 @@
 use App\Http\Controllers\Api\V1\Auth\ApiKeyRegenerationController;
 use App\Http\Controllers\Api\V1\Auth\RegistrationController;
 use App\Http\Controllers\Api\V1\Tags\DestroyController as TagDestroyController;
+use App\Http\Controllers\Api\V1\Tags\IndexController as TagIndexController;
 use App\Http\Controllers\Api\V1\Tags\ShowController as TagShowController;
 use App\Http\Controllers\Api\V1\Tags\StoreController as TagStoreController;
 use App\Http\Controllers\Api\V1\Tags\UpdateController as TagUpdateController;
@@ -31,6 +32,7 @@ Route::prefix('v1')->name('api.v1.')->group(function () {
         Route::get('/tags/{tag}', TagShowController::class)->name('show');
         Route::patch('/tags/{tag}', TagUpdateController::class)->name('update');
         Route::delete('/tags/{tag}', TagDestroyController::class)->name('destroy');
+        Route::get('/tags', TagIndexController::class)->name('index');
     });
 });
 
