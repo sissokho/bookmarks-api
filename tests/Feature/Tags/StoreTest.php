@@ -29,14 +29,14 @@ class StoreTest extends TestCase
         $response->assertCreated()
             ->assertJson([
                 'data' => [
-                    'name' => $payload['name'],
+                    'name' => strtolower($payload['name']),
                     'slug' => 'continuous-integration',
                 ],
             ]);
 
         $this->assertDatabaseCount('tags', 1);
         $this->assertDatabaseHas('tags', [
-            'name' => $payload['name'],
+            'name' => strtolower($payload['name']),
             'slug' => 'continuous-integration',
             'user_id' => $user->id,
         ]);
@@ -95,7 +95,7 @@ class StoreTest extends TestCase
         $response->assertCreated();
 
         $this->assertDatabaseCount('tags', 2);
-        $this->assertCount(2, Tag::where('name', 'Test tag')->get());
+        $this->assertCount(2, Tag::where('name', strtolower('Test tag'))->get());
         $this->assertCount(1, Tag::where('user_id', $user->id)->get());
     }
 
@@ -105,6 +105,7 @@ class StoreTest extends TestCase
             'name is empty' => ['', 'The name field is required.'],
             'name is longer than 255 chars' => [Str::of('a')->repeat(256), 'The name must not be greater than 255 characters.'],
             'name is not unique for this user' => ['Test tag', 'The name has already been taken.'],
+            'name is not unique for this user (lowercase version)' => ['test tag', 'The name has already been taken.'],
         ];
     }
 }

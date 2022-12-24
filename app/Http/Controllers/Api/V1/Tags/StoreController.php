@@ -16,9 +16,9 @@ class StoreController extends Controller
         /** @var User $user */
         $user = Auth::user();
 
-        $tag = $user->tags()->create(
-            $request->safe()->all()
-        );
+        $tag = $user->tags()->create([
+            'name' => strtolower(strval($request->name)),
+        ]);
 
         return TagResource::make($tag);
     }

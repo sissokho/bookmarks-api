@@ -39,7 +39,7 @@ class IndexTest extends TestCase
                     ->has(
                         'data.0',
                         fn ($json) => $json->where('id', $mostRecentTag->id)
-                            ->where('name', $mostRecentTag->name)
+                            ->where('name', strtolower($mostRecentTag->name))
                             ->where('slug', $mostRecentTag->slug)
                             ->where('created_at', $mostRecentTag->created_at->toJson())
                     )

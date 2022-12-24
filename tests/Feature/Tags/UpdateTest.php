@@ -34,7 +34,7 @@ class UpdateTest extends TestCase
             ->assertExactJson([
                 'data' => [
                     'id' => $tag->id,
-                    'name' => 'PHP Tips',
+                    'name' => strtolower('PHP Tips'),
                     'slug' => 'php-tips',
                     'created_at' => $tag->created_at,
                 ],
@@ -43,7 +43,7 @@ class UpdateTest extends TestCase
         $this->assertDatabaseCount('tags', 1);
         $this->assertDatabaseHas('tags', [
             'id' => $tag->id,
-            'name' => 'PHP Tips',
+            'name' => strtolower('PHP Tips'),
             'slug' => 'php-tips',
         ]);
     }
@@ -139,7 +139,7 @@ class UpdateTest extends TestCase
             ->assertExactJson([
                 'data' => [
                     'id' => $tag->id,
-                    'name' => 'Test tag',
+                    'name' => strtolower('Test tag'),
                     'slug' => 'test-tag',
                     'created_at' => $tag->created_at,
                 ],
@@ -148,7 +148,7 @@ class UpdateTest extends TestCase
         $this->assertDatabaseCount('tags', 1);
         $this->assertDatabaseHas('tags', [
             'id' => $tag->id,
-            'name' => 'Test tag',
+            'name' => strtolower('Test tag'),
             'slug' => 'test-tag',
         ]);
     }
@@ -159,6 +159,7 @@ class UpdateTest extends TestCase
             'name is empty' => ['', 'The name field is required.'],
             'name is longer than 255 chars' => [Str::of('a')->repeat(256), 'The name must not be greater than 255 characters.'],
             'name is not unique for this user' => ['Another tag', 'The name has already been taken.'],
+            'name is not unique for this user (lowercase version)' => ['another tag', 'The name has already been taken.'],
         ];
     }
 }

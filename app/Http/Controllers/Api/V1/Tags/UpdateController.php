@@ -14,7 +14,9 @@ class UpdateController extends Controller
     {
         $this->authorize('update', $tag);
 
-        $tag->fill($request->safe()->all());
+        $tag->fill([
+            'name' => strtolower(strval($request->name)),
+        ]);
 
         if ($tag->isDirty()) {
             $tag->save();
