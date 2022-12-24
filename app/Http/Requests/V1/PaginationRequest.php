@@ -1,10 +1,10 @@
 <?php
 
-namespace App\Http\Requests\Auth;
+namespace App\Http\Requests\V1;
 
 use Illuminate\Foundation\Http\FormRequest;
 
-class ApiKeyRegenerationRequest extends FormRequest
+class PaginationRequest extends FormRequest
 {
     public function authorize(): bool
     {
@@ -17,8 +17,8 @@ class ApiKeyRegenerationRequest extends FormRequest
     public function rules(): array
     {
         return [
-            'email' => ['required', 'email'],
-            'password' => 'required',
+            'per_page' => ['nullable', 'numeric', 'integer', 'min:1', 'max:100'],
+            'page' => ['nullable', 'numeric', 'integer', 'min:1'],
         ];
     }
 }

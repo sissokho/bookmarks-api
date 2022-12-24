@@ -1,6 +1,6 @@
 <?php
 
-namespace Tests\Feature\Actions;
+namespace Tests\Integration\Actions;
 
 use App\Actions\GenerateApiKey;
 use App\Mail\ApiKeyGenerated;
