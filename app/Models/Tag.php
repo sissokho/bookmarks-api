@@ -4,7 +4,7 @@ namespace App\Models;
 
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
-use Illuminate\Database\Eloquent\Relations\BelongsTo;
+use Illuminate\Database\Eloquent\Relations\BelongsToMany;
 use Str;
 
 class Tag extends Model
@@ -24,10 +24,10 @@ class Tag extends Model
     }
 
     /**
-     * @return BelongsTo<User, Tag>
+     * @return BelongsToMany<Bookmark>
      */
-    public function user(): BelongsTo
+    public function bookmarks(): BelongsToMany
     {
-        return $this->belongsTo(User::class);
+        return $this->belongsToMany(Bookmark::class);
     }
 }

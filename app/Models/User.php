@@ -27,10 +27,10 @@ class User extends Authenticatable
     ];
 
     /**
-     * @return HasMany<Tag>
+     * @return HasMany<Bookmark>
      */
-    public function tags(): HasMany
+    public function bookmarks(): HasMany
     {
-        return $this->hasMany(Tag::class);
+        return $this->hasMany(Bookmark::class);
     }
 }

@@ -8,11 +8,11 @@ return new class extends Migration
 {
     public function up(): void
     {
-        Schema::create('tags', function (Blueprint $table) {
+        Schema::create('bookmark_tag', function (Blueprint $table) {
             $table->id();
 
-            $table->string('name')->unique();
-            $table->string('slug')->unique();
+            $table->foreignId('bookmark_id')->constrained()->cascadeOnDelete();
+            $table->foreignId('tag_id')->constrained()->cascadeOnDelete();
 
             $table->timestamps();
         });
@@ -20,6 +20,6 @@ return new class extends Migration
 
     public function down(): void
     {
-        Schema::dropIfExists('tags');
+        Schema::dropIfExists('bookmark_tag');
     }
 };

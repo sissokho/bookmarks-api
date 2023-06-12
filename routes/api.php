@@ -2,11 +2,8 @@
 
 use App\Http\Controllers\Api\V1\Auth\ApiKeyRegenerationController;
 use App\Http\Controllers\Api\V1\Auth\RegistrationController;
-use App\Http\Controllers\Api\V1\Tags\DestroyController as TagDestroyController;
+use App\Http\Controllers\Api\V1\Bookmarks\StoreController as BookmarkStoreController;
 use App\Http\Controllers\Api\V1\Tags\IndexController as TagIndexController;
-use App\Http\Controllers\Api\V1\Tags\ShowController as TagShowController;
-use App\Http\Controllers\Api\V1\Tags\StoreController as TagStoreController;
-use App\Http\Controllers\Api\V1\Tags\UpdateController as TagUpdateController;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
 
@@ -28,11 +25,12 @@ Route::prefix('v1')->name('api.v1.')->group(function () {
 
     // Tags
     Route::middleware('auth:sanctum')->name('tags.')->group(function () {
-        Route::post('/tags', TagStoreController::class)->name('store');
-        Route::get('/tags/{tag}', TagShowController::class)->name('show');
-        Route::patch('/tags/{tag}', TagUpdateController::class)->name('update');
-        Route::delete('/tags/{tag}', TagDestroyController::class)->name('destroy');
         Route::get('/tags', TagIndexController::class)->name('index');
+    });
+
+    // Bookmarks
+    Route::middleware('auth:sanctum')->name('bookmarks.')->group(function () {
+        Route::post('/bookmarks', BookmarkStoreController::class)->name('store');
     });
 });
 
