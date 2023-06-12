@@ -6,8 +6,8 @@ use Illuminate\Contracts\Support\Arrayable;
 use Illuminate\Http\Resources\Json\JsonResource;
 use JsonSerializable;
 
-/** @mixin \App\Models\Tag */
-class TagResource extends JsonResource
+/** @mixin \App\Models\Bookmark */
+class BookmarkResource extends JsonResource
 {
     /**
      * Transform the resource into an array.
@@ -19,9 +19,12 @@ class TagResource extends JsonResource
     {
         return [
             'id' => $this->id,
-            'name' => $this->name,
-            'slug' => $this->slug,
+            'title' => $this->title,
+            'url' => $this->url,
+            'favorite' => $this->favorite,
+            'archived' => is_null($this->deleted_at) ? false : true,
             'created_at' => $this->created_at?->toDateTimeString(),
+            'tags' => TagResource::collection($this->whenLoaded('tags')),
         ];
     }
 }
