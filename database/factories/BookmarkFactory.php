@@ -11,7 +11,6 @@ use Illuminate\Database\Eloquent\Factories\Factory;
 class BookmarkFactory extends Factory
 {
     /**
-     *
      * @return array<string, mixed>
      */
     public function definition(): array
@@ -20,7 +19,7 @@ class BookmarkFactory extends Factory
             'title' => fake()->unique()->words(4, asText: true),
             'url' => 'https://laravel.com',
             'favorite' => false,
-            'user_id' => User::factory()
+            'user_id' => User::factory(),
         ];
     }
 }

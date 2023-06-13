@@ -5,9 +5,7 @@ namespace Tests\Feature\Http\Controllers\Bookmarks;
 use App\Models\Bookmark;
 use App\Models\Tag;
 use App\Models\User;
-use Carbon\Factory;
 use Illuminate\Foundation\Testing\RefreshDatabase;
-use Illuminate\Foundation\Testing\WithFaker;
 use Laravel\Sanctum\Sanctum;
 use Tests\TestCase;
 

@@ -2,8 +2,8 @@
 
 use App\Http\Controllers\Api\V1\Auth\ApiKeyRegenerationController;
 use App\Http\Controllers\Api\V1\Auth\RegistrationController;
-use App\Http\Controllers\Api\V1\Bookmarks\StoreController as BookmarkStoreController;
 use App\Http\Controllers\Api\V1\Bookmarks\DestroyController as BookmarkDestroyController;
+use App\Http\Controllers\Api\V1\Bookmarks\StoreController as BookmarkStoreController;
 use App\Http\Controllers\Api\V1\Tags\IndexController as TagIndexController;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
