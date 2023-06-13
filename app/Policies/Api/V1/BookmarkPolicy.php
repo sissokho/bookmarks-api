@@ -10,38 +10,9 @@ class BookmarkPolicy
 {
     use HandlesAuthorization;
 
-    /**
-     * Determine whether the user can view any models.
-     *
-     * @param  \App\Models\User  $user
-     * @return \Illuminate\Auth\Access\Response|bool
-     */
-    public function viewAny(User $user)
+    public function view(User $user, Bookmark $bookmark): bool
     {
-        //
-    }
-
-    /**
-     * Determine whether the user can view the model.
-     *
-     * @param  \App\Models\User  $user
-     * @param  \App\Models\Bookmark  $bookmark
-     * @return \Illuminate\Auth\Access\Response|bool
-     */
-    public function view(User $user, Bookmark $bookmark)
-    {
-        //
-    }
-
-    /**
-     * Determine whether the user can create models.
-     *
-     * @param  \App\Models\User  $user
-     * @return \Illuminate\Auth\Access\Response|bool
-     */
-    public function create(User $user)
-    {
-        //
+        return $bookmark->user()->is($user);
     }
 
     /**
@@ -58,7 +29,7 @@ class BookmarkPolicy
 
     public function delete(User $user, Bookmark $bookmark): bool
     {
-        return $bookmark->user()->is($user);
+        return $this->view($user, $bookmark);
     }
 
     /**
