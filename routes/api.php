@@ -1,5 +1,6 @@
 <?php
 
+use App\Http\Controllers\Api\V1\Archives\UpdateController as ArchiveUpdateController;
 use App\Http\Controllers\Api\V1\Auth\ApiKeyRegenerationController;
 use App\Http\Controllers\Api\V1\Auth\RegistrationController;
 use App\Http\Controllers\Api\V1\Bookmarks\DestroyController as BookmarkDestroyController;
@@ -45,6 +46,11 @@ Route::prefix('v1')->name('api.v1.')->group(function () {
     Route::middleware('auth:sanctum')->name('favorites.')->group(function () {
         Route::patch('/favorites/{bookmark}', FavoriteUpdateController::class)->name('update');
         Route::delete('/favorites/{bookmark}', FavoriteDestroyController::class)->name('destroy');
+    });
+
+    // Archives
+    Route::middleware('auth:sanctum')->name('archives.')->group(function () {
+        Route::patch('/archives/{bookmark}', ArchiveUpdateController::class)->name('update');
     });
 });
 
