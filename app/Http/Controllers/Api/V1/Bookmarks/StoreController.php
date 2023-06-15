@@ -20,7 +20,7 @@ class StoreController extends Controller
             $request->safe()->except('tags')
         );
 
-        if ($request->filled('tags')) {
+        if ($request->has('tags')) {
             $tags = $fetchOrCreateTags($request->collect('tags'));
 
             $bookmark->tags()->attach($tags->pluck('id'));

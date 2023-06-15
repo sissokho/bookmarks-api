@@ -20,7 +20,7 @@ class StoreRequest extends FormRequest
             'title' => ['required', 'string', 'max:255'],
             'url' => ['required', 'url', 'max:255'],
             'favorite' => ['required', 'boolean'],
-            'tags' => ['array'],
+            'tags' => ['sometimes', 'required', 'array'],
             'tags.*' => ['string', 'max:255'],
         ];
     }

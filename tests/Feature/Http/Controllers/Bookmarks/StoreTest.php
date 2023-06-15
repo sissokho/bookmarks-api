@@ -144,7 +144,7 @@ class StoreTest extends TestCase
      */
     public function inputs_are_validated($payload, $field, $error): void
     {
-        Sanctum::actingAs(User::factory()->make());
+        Sanctum::actingAs(User::factory()->create());
 
         $response = $this->postJson(route('api.v1.bookmarks.store'), $payload);
 
@@ -200,10 +200,25 @@ class StoreTest extends TestCase
                 'field' => 'favorite',
                 'error' => 'must be true or false',
             ],
-            'tags not array' => [
+            'tags is null' => [
+                'payload' => [...$defaultPayload, 'tags' => null],
+                'field' => 'tags',
+                'error' => 'is required',
+            ],
+            'tags is empty string' => [
+                'payload' => [...$defaultPayload, 'tags' => ''],
+                'field' => 'tags',
+                'error' => 'is required',
+            ],
+            'tags is not an array' => [
                 'payload' => [...$defaultPayload, 'tags' => '::tag::'],
                 'field' => 'tags',
                 'error' => 'must be an array',
+            ],
+            'tags is an empty array' => [
+                'payload' => [...$defaultPayload, 'tags' => []],
+                'field' => 'tags',
+                'error' => 'is required',
             ],
             'tags not an array of string' => [
                 'payload' => [...$defaultPayload, 'tags' => [['k']]],
