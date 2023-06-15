@@ -36,7 +36,7 @@ class StoreTest extends TestCase
             'favorite' => false,
         ];
 
-        $response = $this->postJson(route('api.v1.bookmarks.store', $payload));
+        $response = $this->postJson(route('api.v1.bookmarks.store'), $payload);
 
         $response->assertCreated()
             ->assertJson([
@@ -79,7 +79,7 @@ class StoreTest extends TestCase
             'tags' => ['PHP Tips', 'Laravel Tips'],
         ];
 
-        $response = $this->postJson(route('api.v1.bookmarks.store', $payload));
+        $response = $this->postJson(route('api.v1.bookmarks.store'), $payload);
 
         $response->assertCreated()
             ->assertJson([
@@ -133,7 +133,7 @@ class StoreTest extends TestCase
             'tags' => ['Tag One', 'Tag Two'],
         ];
 
-        $this->postJson(route('api.v1.bookmarks.store', $payload));
+        $this->postJson(route('api.v1.bookmarks.store'), $payload);
 
         $action->shouldHaveReceived('__invoke')->once();
     }
@@ -146,7 +146,7 @@ class StoreTest extends TestCase
     {
         Sanctum::actingAs(User::factory()->make());
 
-        $response = $this->postJson(route('api.v1.bookmarks.store', $payload));
+        $response = $this->postJson(route('api.v1.bookmarks.store'), $payload);
 
         $response->assertInvalid([$field => $error]);
     }
