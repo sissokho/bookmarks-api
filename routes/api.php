@@ -6,6 +6,7 @@ use App\Http\Controllers\Api\V1\Bookmarks\DestroyController as BookmarkDestroyCo
 use App\Http\Controllers\Api\V1\Bookmarks\ShowController as BookmarkShowController;
 use App\Http\Controllers\Api\V1\Bookmarks\StoreController as BookmarkStoreController;
 use App\Http\Controllers\Api\V1\Bookmarks\UpdateController as BookmarkUpdateController;
+use App\Http\Controllers\Api\V1\Favorites\DestroyController as FavoriteDestroyController;
 use App\Http\Controllers\Api\V1\Favorites\UpdateController as FavoriteUpdateController;
 use App\Http\Controllers\Api\V1\Tags\IndexController as TagIndexController;
 use Illuminate\Http\Request;
@@ -43,6 +44,7 @@ Route::prefix('v1')->name('api.v1.')->group(function () {
     // Favorites
     Route::middleware('auth:sanctum')->name('favorites.')->group(function () {
         Route::patch('/favorites/{bookmark}', FavoriteUpdateController::class)->name('update');
+        Route::delete('/favorites/{bookmark}', FavoriteDestroyController::class)->name('destroy');
     });
 });
 
