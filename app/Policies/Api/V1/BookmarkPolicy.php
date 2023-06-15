@@ -15,16 +15,9 @@ class BookmarkPolicy
         return $bookmark->user()->is($user);
     }
 
-    /**
-     * Determine whether the user can update the model.
-     *
-     * @param  \App\Models\User  $user
-     * @param  \App\Models\Bookmark  $bookmark
-     * @return \Illuminate\Auth\Access\Response|bool
-     */
-    public function update(User $user, Bookmark $bookmark)
+    public function update(User $user, Bookmark $bookmark): bool
     {
-        //
+        return $this->view($user, $bookmark);
     }
 
     public function delete(User $user, Bookmark $bookmark): bool
