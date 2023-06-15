@@ -94,13 +94,13 @@ class StoreTest extends TestCase
                             'id' => $phpTag->id,
                             'name' => $phpTag->name,
                             'slug' => $phpTag->slug,
-                            'created_at' => now()->toDateTimeString(),
+                            'created_at' => $phpTag->created_at->toDateTimeString(),
                         ],
                         [
                             'id' => $laravelTag->id,
                             'name' => $laravelTag->name,
                             'slug' => $laravelTag->slug,
-                            'created_at' => now()->toDateTimeString(),
+                            'created_at' => $laravelTag->created_at->toDateTimeString(),
                         ],
                     ],
                 ],
@@ -142,7 +142,7 @@ class StoreTest extends TestCase
      * @test
      * @dataProvider validationProvider
      */
-    public function inputs_are_validated($payload, $field, $error): void
+    public function inputs_are_validated(array $payload, string $field, string $error): void
     {
         Sanctum::actingAs(User::factory()->create());
 
