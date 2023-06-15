@@ -1,5 +1,6 @@
 <?php
 
+use App\Http\Controllers\Api\V1\Archives\DestroyController as ArchiveDestroyController;
 use App\Http\Controllers\Api\V1\Archives\UpdateController as ArchiveUpdateController;
 use App\Http\Controllers\Api\V1\Auth\ApiKeyRegenerationController;
 use App\Http\Controllers\Api\V1\Auth\RegistrationController;
@@ -51,6 +52,7 @@ Route::prefix('v1')->name('api.v1.')->group(function () {
     // Archives
     Route::middleware('auth:sanctum')->name('archives.')->group(function () {
         Route::patch('/archives/{bookmark}', ArchiveUpdateController::class)->name('update');
+        Route::delete('/archives/{bookmark}', ArchiveDestroyController::class)->name('destroy')->withTrashed();
     });
 });
 
