@@ -41,6 +41,7 @@ class StoreTest extends TestCase
         $response->assertCreated()
             ->assertJson([
                 'data' => [
+                    'id' => 1,
                     'title' => $payload['title'],
                     'url' => $payload['url'],
                     'favorite' => $payload['favorite'],
@@ -51,6 +52,7 @@ class StoreTest extends TestCase
 
         $this->assertDatabaseCount('bookmarks', 1);
         $this->assertDatabaseHas('bookmarks', [
+            'id' => 1,
             'title' => $payload['title'],
             'url' => $payload['url'],
             'favorite' => $payload['favorite'],
@@ -84,6 +86,7 @@ class StoreTest extends TestCase
         $response->assertCreated()
             ->assertJson([
                 'data' => [
+                    'id' => 1,
                     'title' => $payload['title'],
                     'url' => $payload['url'],
                     'favorite' => $payload['favorite'],
@@ -186,7 +189,7 @@ class StoreTest extends TestCase
                 'error' => 'must be a valid URL',
             ],
             'url longer than 255 chars' => [
-                'payload' => [...$defaultPayload, 'url' => 'https://'.str_repeat('laravel', 256).'.com'],
+                'payload' => [...$defaultPayload, 'url' => 'https://' . str_repeat('laravel', 256) . '.com'],
                 'field' => 'url',
                 'error' => 'must not be greater than 255',
             ],

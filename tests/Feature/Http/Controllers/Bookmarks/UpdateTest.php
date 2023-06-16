@@ -66,6 +66,7 @@ class UpdateTest extends TestCase
         $response->assertOk()
             ->assertJson([
                 'data' => [
+                    'id' => $bookmark->id,
                     'title' => Arr::get($payload, 'title') ?? $bookmark->title,
                     'url' => Arr::get($payload, 'url') ?? $bookmark->url,
                     'favorite' => Arr::get($payload, 'favorite') ?? $bookmark->favorite,
@@ -82,6 +83,7 @@ class UpdateTest extends TestCase
             ]);
 
         $this->assertDatabaseHas('bookmarks', [
+            'id' => $bookmark->id,
             'title' => Arr::get($payload, 'title') ?? $bookmark->title,
             'url' => Arr::get($payload, 'url') ?? $bookmark->url,
             'favorite' => Arr::get($payload, 'favorite') ?? $bookmark->favorite,
@@ -117,6 +119,7 @@ class UpdateTest extends TestCase
         $response->assertOk()
             ->assertJson([
                 'data' => [
+                    'id' => $bookmark->id,
                     'title' => $bookmark->title,
                     'url' => $bookmark->url,
                     'favorite' => $bookmark->favorite,
@@ -298,7 +301,7 @@ class UpdateTest extends TestCase
                 'error' => 'must be a valid URL',
             ],
             'url longer than 255 chars' => [
-                'payload' => ['url' => 'https://'.str_repeat('laravel', 256).'.com'],
+                'payload' => ['url' => 'https://' . str_repeat('laravel', 256) . '.com'],
                 'field' => 'url',
                 'error' => 'must not be greater than 255',
             ],

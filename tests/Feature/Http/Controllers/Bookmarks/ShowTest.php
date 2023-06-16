@@ -65,6 +65,7 @@ class ShowTest extends TestCase
         $response->assertOk()
             ->assertJson([
                 'data' => [
+                    'id' => $bookmark->id,
                     'title' => $bookmark->title,
                     'url' => $bookmark->url,
                     'favorite' => $bookmark->favorite,
