@@ -16,7 +16,7 @@ class UpdateTest extends TestCase
     /** @test */
     public function user_must_be_authenticated(): void
     {
-        $response = $this->patchJson(route('api.v1.favorites.update', ['bookmark' => 1]));
+        $response = $this->postJson(route('api.v1.favorites.store', ['bookmark' => 1]));
 
         $response->assertUnauthorized();
     }
@@ -26,7 +26,7 @@ class UpdateTest extends TestCase
     {
         Sanctum::actingAs(User::factory()->make());
 
-        $response = $this->patchJson(route('api.v1.favorites.update', ['bookmark' => 1]));
+        $response = $this->postJson(route('api.v1.favorites.store', ['bookmark' => 1]));
 
         $response->assertNotFound();
     }
@@ -38,7 +38,7 @@ class UpdateTest extends TestCase
 
         Sanctum::actingAs(User::factory()->make());
 
-        $response = $this->patchJson(route('api.v1.favorites.update', ['bookmark' => $someonesBookmark]));
+        $response = $this->postJson(route('api.v1.favorites.store', ['bookmark' => $someonesBookmark]));
 
         $response->assertForbidden();
     }
@@ -55,7 +55,7 @@ class UpdateTest extends TestCase
 
         Sanctum::actingAs($user);
 
-        $response = $this->patchJson(route('api.v1.favorites.update', ['bookmark' => $bookmark]));
+        $response = $this->postJson(route('api.v1.favorites.store', ['bookmark' => $bookmark]));
 
         $response->assertOk()
             ->assertJson([
@@ -92,7 +92,7 @@ class UpdateTest extends TestCase
 
         Sanctum::actingAs($user);
 
-        $response = $this->patchJson(route('api.v1.favorites.update', ['bookmark' => $bookmark]));
+        $response = $this->postJson(route('api.v1.favorites.store', ['bookmark' => $bookmark]));
 
         $response->assertInvalid(['bookmark' => 'This bookmark has already been added to your favorites.']);
     }

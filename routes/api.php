@@ -45,13 +45,13 @@ Route::prefix('v1')->name('api.v1.')->group(function () {
 
     // Favorites
     Route::middleware('auth:sanctum')->name('favorites.')->group(function () {
-        Route::patch('/favorites/{bookmark}', FavoriteUpdateController::class)->name('update');
+        Route::post('/favorites/{bookmark}', FavoriteUpdateController::class)->name('store');
         Route::delete('/favorites/{bookmark}', FavoriteDestroyController::class)->name('destroy');
     });
 
     // Archives
     Route::middleware('auth:sanctum')->name('archives.')->group(function () {
-        Route::patch('/archives/{bookmark}', ArchiveUpdateController::class)->name('update')->withTrashed();
+        Route::post('/archives/{bookmark}', ArchiveUpdateController::class)->name('store')->withTrashed();
         Route::delete('/archives/{bookmark}', ArchiveDestroyController::class)->name('destroy')->withTrashed();
     });
 });
