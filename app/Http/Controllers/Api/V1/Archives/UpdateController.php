@@ -20,7 +20,7 @@ class UpdateController extends Controller
             ]);
         }
 
-        $bookmark->delete();
+        $bookmark->archive();
 
         return BookmarkResource::make(
             $bookmark->load('tags')
