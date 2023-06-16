@@ -82,28 +82,18 @@ class UpdateTest extends TestCase
     }
 
     /** @test */
-    public function update_query_is_not_executed_if_bookmark_has_already_been_added_to_the_favorites(): void
+    public function validation_exception_is_thrown_if_bookmark_has_already_been_added_to_the_favorites(): void
     {
         $user = User::factory()->create();
 
         $bookmark = Bookmark::factory()
             ->for($user)
-            ->create(
-                [
-                    'favorite' => true,
-                    'created_at' => now()->subDay(),
-                    'updated_at' => now()->subDay(),
-                ]
-            );
+            ->create(['favorite' => true]);
 
         Sanctum::actingAs($user);
 
-        $this->patchJson(route('api.v1.favorites.update', ['bookmark' => $bookmark]));
+        $response = $this->patchJson(route('api.v1.favorites.update', ['bookmark' => $bookmark]));
 
-        $this->assertDatabaseHas('bookmarks', [
-            'id' => $bookmark->id,
-            'favorite' => true,
-            'updated_at' => now()->subDay(),
-        ]);
+        $response->assertInvalid(['bookmark' => 'This bookmark has already been added to your favorites.']);
     }
 }
