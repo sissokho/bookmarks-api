@@ -24,16 +24,4 @@ class BookmarkPolicy
     {
         return $this->view($user, $bookmark);
     }
-
-    /**
-     * Determine whether the user can restore the model.
-     *
-     * @param  \App\Models\User  $user
-     * @param  \App\Models\Bookmark  $bookmark
-     * @return \Illuminate\Auth\Access\Response|bool
-     */
-    public function restore(User $user, Bookmark $bookmark)
-    {
-        //
-    }
 }
