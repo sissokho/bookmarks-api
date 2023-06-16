@@ -51,7 +51,7 @@ Route::prefix('v1')->name('api.v1.')->group(function () {
 
     // Archives
     Route::middleware('auth:sanctum')->name('archives.')->group(function () {
-        Route::patch('/archives/{bookmark}', ArchiveUpdateController::class)->name('update');
+        Route::patch('/archives/{bookmark}', ArchiveUpdateController::class)->name('update')->withTrashed();
         Route::delete('/archives/{bookmark}', ArchiveDestroyController::class)->name('destroy')->withTrashed();
     });
 });

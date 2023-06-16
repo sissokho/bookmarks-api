@@ -6,6 +6,7 @@ use App\Http\Controllers\Controller;
 use App\Http\Resources\V1\BookmarkResource;
 use App\Models\Bookmark;
 use Illuminate\Http\Resources\Json\JsonResource;
+use Illuminate\Validation\ValidationException;
 
 class UpdateController extends Controller
 {
@@ -13,9 +14,13 @@ class UpdateController extends Controller
     {
         $this->authorize('update', $bookmark);
 
-        if (! $bookmark->trashed()) {
-            $bookmark->delete();
+        if ($bookmark->trashed()) {
+            throw ValidationException::withMessages([
+                'bookmark' => 'This bookmark has already been added to the archives.',
+            ]);
         }
+
+        $bookmark->delete();
 
         return BookmarkResource::make(
             $bookmark->load('tags')

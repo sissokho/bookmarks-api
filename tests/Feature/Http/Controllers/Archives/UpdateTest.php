@@ -82,26 +82,19 @@ class UpdateTest extends TestCase
     }
 
     /** @test */
-    public function query_is_not_executed_if_bookmark_has_already_been_added_to_the_archives(): void
+    public function validation_exception_is_thrown_if_bookmark_has_already_been_added_to_the_archives(): void
     {
         $user = User::factory()->create();
 
         $bookmark = Bookmark::factory()
             ->for($user)
-            ->create(
-                [
-                    'created_at' => now()->subWeek(),
-                    'deleted_at' => now()->subDay(),
-                ]
-            );
+            ->trashed()
+            ->create();
 
         Sanctum::actingAs($user);
 
-        $this->patchJson(route('api.v1.archives.update', ['bookmark' => $bookmark]));
+        $response = $this->patchJson(route('api.v1.archives.update', ['bookmark' => $bookmark]));
 
-        $this->assertDatabaseHas('bookmarks', [
-            'id' => $bookmark->id,
-            'deleted_at' => now()->subDay(),
-        ]);
+        $response->assertInvalid(['bookmark' => 'This bookmark has already been added to the archives.']);
     }
 }
