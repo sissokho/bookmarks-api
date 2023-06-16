@@ -88,4 +88,32 @@ class ShowTest extends TestCase
                 ],
             ]);
     }
+
+    /** @test */
+    public function user_can_see_the_details_of_an_archived_bookmark(): void
+    {
+        $user = User::factory()->create();
+
+        $bookmark = Bookmark::factory()
+            ->for($user)
+            ->trashed()
+            ->create();
+
+        Sanctum::actingAs($user);
+
+        $response = $this->getJson(route('api.v1.bookmarks.show', ['bookmark' => $bookmark]));
+
+        $response->assertOk()
+            ->assertJson([
+                'data' => [
+                    'id' => $bookmark->id,
+                    'title' => $bookmark->title,
+                    'url' => $bookmark->url,
+                    'favorite' => $bookmark->favorite,
+                    'archived' => true,
+                    'created_at' => $bookmark->created_at->toDateTimeString(),
+                    'tags' => null,
+                ],
+            ]);
+    }
 }
