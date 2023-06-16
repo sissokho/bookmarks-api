@@ -81,4 +81,20 @@ class DestroyTest extends TestCase
             'deleted_at' => null,
         ]);
     }
+
+    /** @test */
+    public function validation_exception_is_throw_if_bookmark_is_not_in_the_archive(): void
+    {
+        $user = User::factory()->create();
+
+        $bookmark = Bookmark::factory()
+            ->for($user)
+            ->create();
+
+        Sanctum::actingAs($user);
+
+        $response = $this->deleteJson(route('api.v1.archives.destroy', ['bookmark' => $bookmark]));
+
+        $response->assertInvalid(['bookmark' => 'This bookmark is not in the archives.']);
+    }
 }
