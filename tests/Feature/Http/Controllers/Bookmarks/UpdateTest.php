@@ -133,6 +133,43 @@ class UpdateTest extends TestCase
     }
 
     /** @test */
+    public function archived_bookmark_can_be_updated(): void
+    {
+        $user = User::factory()->create();
+
+        $bookmark = Bookmark::factory()
+            ->for($user)
+            ->trashed()
+            ->create();
+
+        Sanctum::actingAs($user);
+
+        $response = $this->patchJson(route('api.v1.bookmarks.update', ['bookmark' => $bookmark]), [
+            'title' => '::title::',
+            'url' => 'https://twitter.com'
+        ]);
+
+        $response->assertOk()
+            ->assertJson([
+                'data' => [
+                    'id' => $bookmark->id,
+                    'title' => '::title::',
+                    'url' => 'https://twitter.com',
+                    'favorite' => false,
+                    'archived' => true,
+                    'created_at' => $bookmark->created_at->toDateTimeString(),
+                    'tags' => null
+                ],
+            ]);
+
+        $this->assertDatabaseHas('bookmarks', [
+            'id' => $bookmark->id,
+            'title' => '::title::',
+            'url' => 'https://twitter.com'
+        ]);
+    }
+
+    /** @test */
     public function createorfetchaction_is_called_by_the_controller_if_tags_are_provided_in_the_request(): void
     {
         $action = $this->spy(FetchOrCreateTags::class);

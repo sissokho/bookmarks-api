@@ -39,7 +39,7 @@ Route::prefix('v1')->name('api.v1.')->group(function () {
     Route::middleware('auth:sanctum')->name('bookmarks.')->group(function () {
         Route::post('/bookmarks', BookmarkStoreController::class)->name('store');
         Route::get('/bookmarks/{bookmark}', BookmarkShowController::class)->name('show')->withTrashed();
-        Route::patch('/bookmarks/{bookmark}', BookmarkUpdateController::class)->name('update');
+        Route::patch('/bookmarks/{bookmark}', BookmarkUpdateController::class)->name('update')->withTrashed();
         Route::delete('/bookmarks/{bookmark}', BookmarkDestroyController::class)->name('destroy')->withTrashed();
     });
 
