@@ -40,7 +40,7 @@ Route::prefix('v1')->name('api.v1.')->group(function () {
         Route::post('/bookmarks', BookmarkStoreController::class)->name('store');
         Route::get('/bookmarks/{bookmark}', BookmarkShowController::class)->name('show');
         Route::patch('/bookmarks/{bookmark}', BookmarkUpdateController::class)->name('update');
-        Route::delete('/bookmarks/{bookmark}', BookmarkDestroyController::class)->name('destroy');
+        Route::delete('/bookmarks/{bookmark}', BookmarkDestroyController::class)->name('destroy')->withTrashed();
     });
 
     // Favorites

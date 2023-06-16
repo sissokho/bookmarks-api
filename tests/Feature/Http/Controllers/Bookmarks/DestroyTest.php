@@ -62,4 +62,23 @@ class DestroyTest extends TestCase
         $this->assertModelMissing($bookmark);
         $this->assertDatabaseCount('bookmark_tag', 0);
     }
+
+    /** @test */
+    public function archived_bookmark_can_be_deleted(): void
+    {
+        $user = User::factory()->create();
+
+        $bookmark = Bookmark::factory()
+            ->for($user)
+            ->trashed()
+            ->create();
+
+        Sanctum::actingAs($user);
+
+        $response = $this->deleteJson(route('api.v1.bookmarks.destroy', ['bookmark' => $bookmark]));
+
+        $response->assertNoContent();
+
+        $this->assertModelMissing($bookmark);
+    }
 }
