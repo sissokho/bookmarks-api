@@ -6,6 +6,7 @@ use App\Http\Controllers\Controller;
 use App\Http\Resources\V1\BookmarkResource;
 use App\Models\Bookmark;
 use Illuminate\Http\Resources\Json\JsonResource;
+use Illuminate\Validation\ValidationException;
 
 class DestroyController extends Controller
 {
@@ -15,9 +16,13 @@ class DestroyController extends Controller
 
         $bookmark->fill(['favorite' => false]);
 
-        if ($bookmark->isDirty()) {
-            $bookmark->save();
+        if ($bookmark->isClean()) {
+            throw ValidationException::withMessages([
+                'bookmark' => 'This bookmark is not in the favorites.',
+            ]);
         }
+
+        $bookmark->save();
 
         return BookmarkResource::make(
             $bookmark->load('tags')

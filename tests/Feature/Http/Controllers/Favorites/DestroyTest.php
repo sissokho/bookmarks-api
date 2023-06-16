@@ -82,28 +82,18 @@ class DestroyTest extends TestCase
     }
 
     /** @test */
-    public function update_query_is_not_executed_if_bookmark_has_already_been_removed_from_the_favorites(): void
+    public function validation_exception_is_thrown_if_bookmark_is_not_in_the_favorites(): void
     {
         $user = User::factory()->create();
 
         $bookmark = Bookmark::factory()
             ->for($user)
-            ->create(
-                [
-                    'favorite' => false,
-                    'created_at' => now()->subDay(),
-                    'updated_at' => now()->subDay(),
-                ]
-            );
+            ->create(['favorite' => false]);
 
         Sanctum::actingAs($user);
 
-        $this->deleteJson(route('api.v1.favorites.destroy', ['bookmark' => $bookmark]));
+        $response = $this->deleteJson(route('api.v1.favorites.destroy', ['bookmark' => $bookmark]));
 
-        $this->assertDatabaseHas('bookmarks', [
-            'id' => $bookmark->id,
-            'favorite' => false,
-            'updated_at' => now()->subDay(),
-        ]);
+        $response->assertInvalid(['bookmark' => 'This bookmark is not in the favorites.']);
     }
 }
