@@ -14,6 +14,12 @@ class UpdateController extends Controller
     {
         $this->authorize('update', $bookmark);
 
+        if ($bookmark->trashed()) {
+            throw ValidationException::withMessages([
+                'bookmark' => 'Cannot perform this action on an archived bookmark.',
+            ]);
+        }
+
         $bookmark->fill(['favorite' => true]);
 
         if ($bookmark->isClean()) {

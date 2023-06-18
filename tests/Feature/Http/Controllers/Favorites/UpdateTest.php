@@ -97,4 +97,21 @@ class UpdateTest extends TestCase
 
         $response->assertInvalid(['bookmark' => 'This bookmark has already been added to your favorites.']);
     }
+
+    /** @test */
+    public function archived_bookmark_cant_be_added_to_the_favorites(): void
+    {
+        $user = User::factory()->create();
+
+        $bookmark = Bookmark::factory()
+            ->for($user)
+            ->trashed()
+            ->create();
+
+        Sanctum::actingAs($user);
+
+        $response = $this->patchJson(route('api.v1.favorites.update', ['bookmark' => $bookmark]));
+
+        $response->assertInvalid(['bookmark' => 'Cannot perform this action on an archived bookmark.']);
+    }
 }
