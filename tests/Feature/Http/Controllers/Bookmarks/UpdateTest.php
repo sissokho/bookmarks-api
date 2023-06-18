@@ -146,7 +146,7 @@ class UpdateTest extends TestCase
 
         $response = $this->patchJson(route('api.v1.bookmarks.update', ['bookmark' => $bookmark]), [
             'title' => '::title::',
-            'url' => 'https://twitter.com'
+            'url' => 'https://twitter.com',
         ]);
 
         $response->assertOk()
@@ -158,14 +158,14 @@ class UpdateTest extends TestCase
                     'favorite' => false,
                     'archived' => true,
                     'created_at' => $bookmark->created_at->toDateTimeString(),
-                    'tags' => null
+                    'tags' => null,
                 ],
             ]);
 
         $this->assertDatabaseHas('bookmarks', [
             'id' => $bookmark->id,
             'title' => '::title::',
-            'url' => 'https://twitter.com'
+            'url' => 'https://twitter.com',
         ]);
     }
 
@@ -338,7 +338,7 @@ class UpdateTest extends TestCase
                 'error' => 'must be a valid URL',
             ],
             'url longer than 255 chars' => [
-                'payload' => ['url' => 'https://' . str_repeat('laravel', 256) . '.com'],
+                'payload' => ['url' => 'https://'.str_repeat('laravel', 256).'.com'],
                 'field' => 'url',
                 'error' => 'must not be greater than 255',
             ],
