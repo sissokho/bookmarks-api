@@ -97,4 +97,21 @@ class DestroyTest extends TestCase
 
         $response->assertInvalid(['bookmark' => 'This bookmark is not in the favorites.']);
     }
+
+    /** @test */
+    public function archived_bookmark_cant_be_removed_from_the_favorites(): void
+    {
+        $user = User::factory()->create();
+
+        $bookmark = Bookmark::factory()
+            ->for($user)
+            ->trashed()
+            ->create();
+
+        Sanctum::actingAs($user);
+
+        $response = $this->deleteJson(route('api.v1.favorites.destroy', ['bookmark' => $bookmark]));
+
+        $response->assertInvalid(['bookmark' => 'Cannot perform this action on an archived bookmark.']);
+    }
 }
