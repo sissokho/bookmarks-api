@@ -22,4 +22,13 @@ class BookmarkFactory extends Factory
             'user_id' => User::factory(),
         ];
     }
+
+    public function favorite(): Factory
+    {
+        return $this->state(function () {
+            return [
+                'favorite' => true
+            ];
+        });
+    }
 }

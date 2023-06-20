@@ -51,7 +51,8 @@ class DestroyTest extends TestCase
         $bookmark = Bookmark::factory()
             ->for($user)
             ->has(Tag::factory()->state(['name' => strtolower('Tag One')]))
-            ->create(['favorite' => true]);
+            ->favorite()
+            ->create();
 
         Sanctum::actingAs($user);
 

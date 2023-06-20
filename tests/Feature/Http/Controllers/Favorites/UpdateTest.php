@@ -89,7 +89,8 @@ class UpdateTest extends TestCase
 
         $bookmark = Bookmark::factory()
             ->for($user)
-            ->create(['favorite' => true]);
+            ->favorite()
+            ->create();
 
         Sanctum::actingAs($user);
 
