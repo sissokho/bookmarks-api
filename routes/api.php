@@ -1,16 +1,11 @@
 <?php
 
-use App\Http\Controllers\Api\V1\Archives\DestroyController as ArchiveDestroyController;
-use App\Http\Controllers\Api\V1\Archives\UpdateController as ArchiveUpdateController;
+use App\Http\Controllers\Api\V1\Archives;
 use App\Http\Controllers\Api\V1\Auth\ApiKeyRegenerationController;
 use App\Http\Controllers\Api\V1\Auth\RegistrationController;
-use App\Http\Controllers\Api\V1\Bookmarks\DestroyController as BookmarkDestroyController;
-use App\Http\Controllers\Api\V1\Bookmarks\ShowController as BookmarkShowController;
-use App\Http\Controllers\Api\V1\Bookmarks\StoreController as BookmarkStoreController;
-use App\Http\Controllers\Api\V1\Bookmarks\UpdateController as BookmarkUpdateController;
-use App\Http\Controllers\Api\V1\Favorites\DestroyController as FavoriteDestroyController;
-use App\Http\Controllers\Api\V1\Favorites\UpdateController as FavoriteUpdateController;
-use App\Http\Controllers\Api\V1\Tags\IndexController as TagIndexController;
+use App\Http\Controllers\Api\V1\Bookmarks;
+use App\Http\Controllers\Api\V1\Favorites;
+use App\Http\Controllers\Api\V1\Tags;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
 
@@ -32,27 +27,27 @@ Route::prefix('v1')->name('api.v1.')->group(function () {
 
     // Tags
     Route::middleware('auth:sanctum')->name('tags.')->group(function () {
-        Route::get('/tags', TagIndexController::class)->name('index');
+        Route::get('/tags', Tags\IndexController::class)->name('index');
     });
 
     // Bookmarks
     Route::middleware('auth:sanctum')->name('bookmarks.')->group(function () {
-        Route::post('/bookmarks', BookmarkStoreController::class)->name('store');
-        Route::get('/bookmarks/{bookmark}', BookmarkShowController::class)->name('show')->withTrashed();
-        Route::patch('/bookmarks/{bookmark}', BookmarkUpdateController::class)->name('update')->withTrashed();
-        Route::delete('/bookmarks/{bookmark}', BookmarkDestroyController::class)->name('destroy')->withTrashed();
+        Route::post('/bookmarks', Bookmarks\StoreController::class)->name('store');
+        Route::get('/bookmarks/{bookmark}', Bookmarks\ShowController::class)->name('show')->withTrashed();
+        Route::patch('/bookmarks/{bookmark}', Bookmarks\UpdateController::class)->name('update')->withTrashed();
+        Route::delete('/bookmarks/{bookmark}', Bookmarks\DestroyController::class)->name('destroy')->withTrashed();
     });
 
     // Favorites
     Route::middleware('auth:sanctum')->name('favorites.')->group(function () {
-        Route::patch('/favorites/{bookmark}', FavoriteUpdateController::class)->name('update')->withTrashed();
-        Route::delete('/favorites/{bookmark}', FavoriteDestroyController::class)->name('destroy')->withTrashed();
+        Route::patch('/favorites/{bookmark}', Favorites\UpdateController::class)->name('update')->withTrashed();
+        Route::delete('/favorites/{bookmark}', Favorites\DestroyController::class)->name('destroy')->withTrashed();
     });
 
     // Archives
     Route::middleware('auth:sanctum')->name('archives.')->group(function () {
-        Route::patch('/archives/{bookmark}', ArchiveUpdateController::class)->name('update')->withTrashed();
-        Route::delete('/archives/{bookmark}', ArchiveDestroyController::class)->name('destroy')->withTrashed();
+        Route::patch('/archives/{bookmark}', Archives\UpdateController::class)->name('update')->withTrashed();
+        Route::delete('/archives/{bookmark}', Archives\DestroyController::class)->name('destroy')->withTrashed();
     });
 });
 
