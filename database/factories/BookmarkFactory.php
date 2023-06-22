@@ -27,7 +27,7 @@ class BookmarkFactory extends Factory
     {
         return $this->state(function () {
             return [
-                'favorite' => true
+                'favorite' => true,
             ];
         });
     }
