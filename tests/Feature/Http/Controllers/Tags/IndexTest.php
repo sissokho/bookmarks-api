@@ -1,6 +1,6 @@
 <?php
 
-namespace Tests\Feature\Http\Controllers;
+namespace Tests\Feature\Http\Tags\Controllers;
 
 use App\Models\Tag;
 use App\Models\User;
@@ -120,7 +120,7 @@ class IndexTest extends TestCase
     public function invalidPaginationParameters(): array
     {
         return [
-            'per & per_page are strings' => [
+            'page & per_page are strings' => [
                 'payload' => [
                     'page' => '5ju',
                     'per_page' => '6fd',
@@ -137,7 +137,7 @@ class IndexTest extends TestCase
                 ],
             ],
 
-            'per & per_page are floats' => [
+            'page & per_page are floats' => [
                 'payload' => [
                     'page' => 5.2,
                     'per_page' => 4.5,
@@ -148,7 +148,7 @@ class IndexTest extends TestCase
                 ],
             ],
 
-            'per & per_page are less than 1' => [
+            'page & per_page are less than 1' => [
                 'payload' => [
                     'page' => -5,
                     'per_page' => -2,
