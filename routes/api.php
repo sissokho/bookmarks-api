@@ -32,6 +32,7 @@ Route::prefix('v1')->name('api.v1.')->group(function () {
 
     // Bookmarks
     Route::middleware('auth:sanctum')->name('bookmarks.')->group(function () {
+        Route::get('/bookmarks', Bookmarks\IndexController::class)->name('index');
         Route::post('/bookmarks', Bookmarks\StoreController::class)->name('store');
         Route::get('/bookmarks/{bookmark}', Bookmarks\ShowController::class)->name('show')->withTrashed();
         Route::patch('/bookmarks/{bookmark}', Bookmarks\UpdateController::class)->name('update')->withTrashed();
