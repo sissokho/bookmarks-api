@@ -5,7 +5,6 @@ namespace App\Http\Controllers\Api\V1\Tags;
 use App\Http\Controllers\Controller;
 use App\Http\Requests\V1\PaginationRequest;
 use App\Http\Resources\V1\TagResource;
-use App\Models\Tag;
 use Illuminate\Http\Resources\Json\AnonymousResourceCollection;
 
 class IndexController extends Controller
@@ -15,7 +14,7 @@ class IndexController extends Controller
         $perPage = $request->integer('per_page', default: 15);
         $page = $request->integer('page', default: 1);
 
-        $tags = Tag::query()
+        $tags = $request->user()?->tags()
             ->latest()
             ->paginate(
                 perPage: $perPage,

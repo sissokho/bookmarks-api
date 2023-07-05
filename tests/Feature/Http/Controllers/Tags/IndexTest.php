@@ -2,8 +2,10 @@
 
 namespace Tests\Feature\Http\Tags\Controllers;
 
+use App\Models\Bookmark;
 use App\Models\Tag;
 use App\Models\User;
+use Illuminate\Database\Eloquent\Factories\Sequence;
 use Illuminate\Foundation\Testing\RefreshDatabase;
 use Illuminate\Testing\Fluent\AssertableJson;
 use Laravel\Sanctum\Sanctum;
@@ -27,14 +29,18 @@ class IndexTest extends TestCase
     /** @test */
     public function tags_are_listed_by_the_most_recent_in_a_paginated_way(): void
     {
-        Sanctum::actingAs(User::factory()->make());
+        $user = User::factory()->create();
+
+        Sanctum::actingAs($user);
 
         Tag::factory()
             ->count(20)
+            ->has(Bookmark::factory()->for($user))
             ->state(['created_at' => now()->subDay()])
             ->create();
 
         $mostRecentTag = Tag::factory()
+            ->has(Bookmark::factory()->for($user))
             ->create();
 
         $response = $this->getJson(route('api.v1.tags.index'));
@@ -70,12 +76,62 @@ class IndexTest extends TestCase
     }
 
     /** @test */
+    public function only_tags_associated_to_users_bookmarks_are_returned(): void
+    {
+        $this->withoutExceptionHandling();
+        $user = User::factory()->create();
+
+        Sanctum::actingAs($user);
+
+        Bookmark::factory()
+            ->for($user)
+            ->has(
+                Tag::factory()
+                    ->count(2)
+                    ->state(new Sequence(
+                        ['name' => strtolower('Tag One'), 'created_at' => now()->subMinute()],
+                        ['name' => strtolower('Tag Two')]
+                    ))
+            )
+            ->create();
+
+        Bookmark::factory() // Belongs to another user
+            ->has(Tag::factory()->count(5))
+            ->create();
+
+        $response = $this->getJson(route('api.v1.tags.index'));
+
+        $response->assertOk()
+            ->assertJson(
+                fn (AssertableJson $json) => $json->hasAll(['meta', 'links'])
+                    ->has('data', 2)
+                    ->has(
+                        'data.0',
+                        fn ($json) => $json->where('id', 2)
+                            ->where('name', 'tag two')
+                            ->where('slug', 'tag-two')
+                            ->etc()
+                    )
+                    ->has(
+                        'data.1',
+                        fn ($json) => $json->where('id', 1)
+                            ->where('name', 'tag one')
+                            ->where('slug', 'tag-one')
+                            ->etc()
+                    )
+            );
+    }
+
+    /** @test */
     public function user_can_customize_the_pagination(): void
     {
-        Sanctum::actingAs(User::factory()->make());
+        $user = User::factory()->create();
+
+        Sanctum::actingAs($user);
 
         Tag::factory()
             ->count(20)
+            ->has(Bookmark::factory()->for($user))
             ->create();
 
         $response = $this->getJson(route('api.v1.tags.index', ['per_page' => 10, 'page' => 2]));
@@ -105,6 +161,7 @@ class IndexTest extends TestCase
 
     /**
      * @test
+     *
      * @dataProvider invalidPaginationParameters
      */
     public function pagination_parameters_are_validated($params, $errors): void
