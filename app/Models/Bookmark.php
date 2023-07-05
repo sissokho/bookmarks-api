@@ -42,8 +42,6 @@ class Bookmark extends Model
 
     /**
      * @param  Builder<Bookmark>  $query
-     * @param  string  $searchTerm
-     * @return void
      */
     public function scopeSearch(Builder $query, string $searchTerm): void
     {

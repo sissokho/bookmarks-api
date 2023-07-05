@@ -12,14 +12,14 @@ class IndexController extends Controller
 {
     public function __invoke(PaginationRequest $request): AnonymousResourceCollection
     {
-        $perPage = $request->per_page ?? 15;
-        $page = $request->page ?? 1;
+        $perPage = $request->integer('per_page', default: 15);
+        $page = $request->integer('page', default: 1);
 
         $tags = Tag::query()
             ->latest()
             ->paginate(
-                perPage: intval($perPage),
-                page: intval($page)
+                perPage: $perPage,
+                page: $page
             );
 
         return TagResource::collection($tags);
