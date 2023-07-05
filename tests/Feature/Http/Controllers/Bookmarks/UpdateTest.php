@@ -48,6 +48,7 @@ class UpdateTest extends TestCase
 
     /**
      * @test
+     *
      * @dataProvider bookmarkProvider
      */
     public function bookmark_can_be_updated_partially_or_fully(array $payload): void
@@ -92,6 +93,7 @@ class UpdateTest extends TestCase
 
     /**
      * @test
+     *
      * @dataProvider tagProvider
      */
     public function bookmark_tags_can_be_updated(array|null $payload, array $tagsJson, int $tagsCount): void
@@ -222,6 +224,7 @@ class UpdateTest extends TestCase
 
     /**
      * @test
+     *
      * @dataProvider validationProvider
      */
     public function inputs_are_validated(array $payload, string $field, string $error): void

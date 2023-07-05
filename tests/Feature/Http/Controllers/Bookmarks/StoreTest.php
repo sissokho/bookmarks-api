@@ -143,6 +143,7 @@ class StoreTest extends TestCase
 
     /**
      * @test
+     *
      * @dataProvider validationProvider
      */
     public function inputs_are_validated(array $payload, string $field, string $error): void

@@ -241,6 +241,7 @@ class IndexTest extends TestCase
 
     /**
      * @test
+     *
      * @dataProvider sortProvider
      */
     public function user_can_customize_the_ordering_of_the_bookmarks(Order $order): void
@@ -291,6 +292,7 @@ class IndexTest extends TestCase
 
     /**
      * @test
+     *
      * @dataProvider invalidParameters
      */
     public function parameters_are_validated($params, $errors): void
