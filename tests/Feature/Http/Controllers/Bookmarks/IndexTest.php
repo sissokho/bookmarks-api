@@ -115,6 +115,46 @@ class IndexTest extends TestCase
     }
 
     /** @test */
+    public function favorite_bookmarks_are_returned_but_not_archived_ones(): void
+    {
+        $user = User::factory()->create();
+
+        Sanctum::actingAs($user);
+
+        Bookmark::factory()
+            ->for($user)
+            ->trashed()
+            ->create();
+
+        $userBookmark = Bookmark::factory()
+            ->for($user)
+            ->has(Tag::factory()->state(['name' => strtolower('Tag One')]))
+            ->favorite()
+            ->create();
+
+        $response = $this->getJson(route('api.v1.bookmarks.index'));
+
+        $response->assertOk()
+            ->assertJson(
+                fn (AssertableJson $json) => $json->hasAll(['meta', 'links'])
+                    ->has('data', 1)
+                    ->has(
+                        'data.0',
+                        fn ($json) => $json->where('id', $userBookmark->id)
+                            ->where('title', $userBookmark->title)
+                            ->where('url', $userBookmark->url)
+                            ->where('favorite', $userBookmark->favorite)
+                            ->where('archived', false)
+                            ->where('created_at', $userBookmark->created_at->toDateTimeString())
+                            ->where('tags.0.id', 1)
+                            ->where('tags.0.name', 'tag one')
+                            ->where('tags.0.slug', 'tag-one')
+                            ->where('tags.0.created_at', now()->toDateTimeString())
+                    )
+            );
+    }
+
+    /** @test */
     public function user_can_customize_the_pagination(): void
     {
         $user = User::factory()->create();
