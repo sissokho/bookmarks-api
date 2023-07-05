@@ -107,11 +107,11 @@ class IndexTest extends TestCase
      * @test
      * @dataProvider invalidPaginationParameters
      */
-    public function pagination_parameters_are_validated($payload, $errors): void
+    public function pagination_parameters_are_validated($params, $errors): void
     {
         Sanctum::actingAs(User::factory()->make());
 
-        $response = $this->getJson(route('api.v1.tags.index', $payload));
+        $response = $this->getJson(route('api.v1.tags.index', $params));
 
         $response->assertUnprocessable()
             ->assertInvalid($errors);
@@ -121,7 +121,7 @@ class IndexTest extends TestCase
     {
         return [
             'page & per_page are strings' => [
-                'payload' => [
+                'params' => [
                     'page' => '5ju',
                     'per_page' => '6fd',
                 ],
@@ -138,7 +138,7 @@ class IndexTest extends TestCase
             ],
 
             'page & per_page are floats' => [
-                'payload' => [
+                'params' => [
                     'page' => 5.2,
                     'per_page' => 4.5,
                 ],
@@ -149,7 +149,7 @@ class IndexTest extends TestCase
             ],
 
             'page & per_page are less than 1' => [
-                'payload' => [
+                'params' => [
                     'page' => -5,
                     'per_page' => -2,
                 ],
@@ -160,7 +160,7 @@ class IndexTest extends TestCase
             ],
 
             'per_page is greater than 100' => [
-                'payload' => [
+                'params' => [
                     'per_page' => 101,
                 ],
                 'errors' => [
