@@ -25,7 +25,6 @@ class IndexController extends Controller
                 Order::Oldest->value => $query->oldest()
             })
             ->when($request->missing('order_by'), fn (Builder $query): Builder => $query->latest())
-            ->latest()
             ->paginate(
                 perPage: $perPage,
                 page: $page

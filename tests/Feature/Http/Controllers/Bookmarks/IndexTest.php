@@ -204,7 +204,7 @@ class IndexTest extends TestCase
 
         $downingTech = Bookmark::factory()
             ->for($user)
-            ->create(['title' => 'Luke Downing Blog', 'url' => 'downing.tech']); // Title and url match
+            ->create(['title' => 'Luke Downing Blog', 'url' => 'downing.tech', 'created_at' => now()->subMinute()]); // Title and url match
 
         $dummyWebsite = Bookmark::factory()
             ->for($user)
@@ -218,22 +218,22 @@ class IndexTest extends TestCase
                     ->has('data', 2)
                     ->has(
                         'data.0',
-                        fn ($json) => $json->where('id', $downingTech->id)
-                            ->where('title', $downingTech->title)
-                            ->where('url', $downingTech->url)
-                            ->where('favorite', $downingTech->favorite)
-                            ->where('archived', false)
-                            ->where('created_at', $downingTech->created_at->toDateTimeString())
-                            ->where('tags', [])
-                    )
-                    ->has(
-                        'data.1',
                         fn ($json) => $json->where('id', $dummyWebsite->id)
                             ->where('title', $dummyWebsite->title)
                             ->where('url', $dummyWebsite->url)
                             ->where('favorite', $dummyWebsite->favorite)
                             ->where('archived', false)
                             ->where('created_at', $dummyWebsite->created_at->toDateTimeString())
+                            ->where('tags', [])
+                    )
+                    ->has(
+                        'data.1',
+                        fn ($json) => $json->where('id', $downingTech->id)
+                            ->where('title', $downingTech->title)
+                            ->where('url', $downingTech->url)
+                            ->where('favorite', $downingTech->favorite)
+                            ->where('archived', false)
+                            ->where('created_at', $downingTech->created_at->toDateTimeString())
                             ->where('tags', [])
                     )
             );

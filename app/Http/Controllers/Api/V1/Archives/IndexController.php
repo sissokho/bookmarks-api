@@ -7,7 +7,6 @@ use App\Http\Controllers\Controller;
 use App\Http\Requests\V1\Bookmarks\IndexRequest;
 use App\Http\Resources\V1\BookmarkResource;
 use Illuminate\Database\Eloquent\Builder;
-use Illuminate\Http\Request;
 use Illuminate\Http\Resources\Json\AnonymousResourceCollection;
 
 class IndexController extends Controller
