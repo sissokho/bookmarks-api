@@ -41,6 +41,7 @@ Route::prefix('v1')->name('api.v1.')->group(function () {
 
     // Favorites
     Route::middleware('auth:sanctum')->name('favorites.')->group(function () {
+        Route::get('/favorites', Favorites\IndexController::class)->name('index');
         Route::patch('/favorites/{bookmark}', Favorites\UpdateController::class)->name('update')->withTrashed();
         Route::delete('/favorites/{bookmark}', Favorites\DestroyController::class)->name('destroy')->withTrashed();
     });
