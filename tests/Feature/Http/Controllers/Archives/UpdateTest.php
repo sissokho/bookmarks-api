@@ -96,6 +96,7 @@ class UpdateTest extends TestCase
 
         $response = $this->patchJson(route('api.v1.archives.update', ['bookmark' => $bookmark]));
 
-        $response->assertInvalid(['bookmark' => 'This bookmark has already been added to the archives.']);
+        $response->assertUnprocessable()
+            ->assertJson(['message' => 'This bookmark has already been added to the archives.']);
     }
 }

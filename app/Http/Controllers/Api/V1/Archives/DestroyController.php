@@ -6,7 +6,7 @@ use App\Http\Controllers\Controller;
 use App\Http\Resources\V1\BookmarkResource;
 use App\Models\Bookmark;
 use Illuminate\Http\Resources\Json\JsonResource;
-use Illuminate\Validation\ValidationException;
+use Illuminate\Http\Response;
 
 class DestroyController extends Controller
 {
@@ -15,9 +15,7 @@ class DestroyController extends Controller
         $this->authorize('update', $bookmark);
 
         if (! $bookmark->trashed()) {
-            throw ValidationException::withMessages([
-                'bookmark' => 'This bookmark is not in the archives.',
-            ]);
+            abort(Response::HTTP_UNPROCESSABLE_ENTITY, 'This bookmark is not in the archives.');
         }
 
         $bookmark->restore();

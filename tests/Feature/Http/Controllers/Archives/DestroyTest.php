@@ -96,6 +96,7 @@ class DestroyTest extends TestCase
 
         $response = $this->deleteJson(route('api.v1.archives.destroy', ['bookmark' => $bookmark]));
 
-        $response->assertInvalid(['bookmark' => 'This bookmark is not in the archives.']);
+        $response->assertUnprocessable()
+            ->assertJson(['message' => 'This bookmark is not in the archives.']);
     }
 }

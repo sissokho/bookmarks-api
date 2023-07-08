@@ -96,7 +96,8 @@ class DestroyTest extends TestCase
 
         $response = $this->deleteJson(route('api.v1.favorites.destroy', ['bookmark' => $bookmark]));
 
-        $response->assertInvalid(['bookmark' => 'This bookmark is not in the favorites.']);
+        $response->assertUnprocessable()
+            ->assertJson(['message' => 'This bookmark is not in the favorites.']);
     }
 
     /** @test */
@@ -113,6 +114,7 @@ class DestroyTest extends TestCase
 
         $response = $this->deleteJson(route('api.v1.favorites.destroy', ['bookmark' => $bookmark]));
 
-        $response->assertInvalid(['bookmark' => 'Cannot perform this action on an archived bookmark.']);
+        $response->assertUnprocessable()
+            ->assertJson(['message' => 'Cannot perform this action on an archived bookmark.']);
     }
 }

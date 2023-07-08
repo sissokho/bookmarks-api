@@ -96,7 +96,8 @@ class UpdateTest extends TestCase
 
         $response = $this->patchJson(route('api.v1.favorites.update', ['bookmark' => $bookmark]));
 
-        $response->assertInvalid(['bookmark' => 'This bookmark has already been added to your favorites.']);
+        $response->assertUnprocessable()
+            ->assertJson(['message' => 'This bookmark has already been added to your favorites.']);
     }
 
     /** @test */
@@ -113,6 +114,7 @@ class UpdateTest extends TestCase
 
         $response = $this->patchJson(route('api.v1.favorites.update', ['bookmark' => $bookmark]));
 
-        $response->assertInvalid(['bookmark' => 'Cannot perform this action on an archived bookmark.']);
+        $response->assertUnprocessable()
+            ->assertJson(['message' => 'Cannot perform this action on an archived bookmark.']);
     }
 }

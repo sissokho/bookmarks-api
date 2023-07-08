@@ -6,7 +6,7 @@ use App\Http\Controllers\Controller;
 use App\Http\Resources\V1\BookmarkResource;
 use App\Models\Bookmark;
 use Illuminate\Http\Resources\Json\JsonResource;
-use Illuminate\Validation\ValidationException;
+use Illuminate\Http\Response;
 
 class UpdateController extends Controller
 {
@@ -15,17 +15,13 @@ class UpdateController extends Controller
         $this->authorize('update', $bookmark);
 
         if ($bookmark->trashed()) {
-            throw ValidationException::withMessages([
-                'bookmark' => 'Cannot perform this action on an archived bookmark.',
-            ]);
+            abort(Response::HTTP_UNPROCESSABLE_ENTITY, 'Cannot perform this action on an archived bookmark.');
         }
 
         $bookmark->fill(['favorite' => true]);
 
         if ($bookmark->isClean()) {
-            throw ValidationException::withMessages([
-                'bookmark' => 'This bookmark has already been added to your favorites.',
-            ]);
+            abort(Response::HTTP_UNPROCESSABLE_ENTITY, 'This bookmark has already been added to your favorites.');
         }
 
         $bookmark->save();
