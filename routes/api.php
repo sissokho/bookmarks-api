@@ -28,6 +28,7 @@ Route::prefix('v1')->name('api.v1.')->group(function () {
     // Tags
     Route::middleware('auth:sanctum')->name('tags.')->group(function () {
         Route::get('/tags', Tags\IndexController::class)->name('index');
+        Route::get('/tags/{tag:slug}/bookmarks', Tags\TaggedBookmarkController::class)->name('show-bookmarks');
     });
 
     // Bookmarks

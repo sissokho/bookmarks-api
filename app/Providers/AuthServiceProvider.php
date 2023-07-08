@@ -5,7 +5,9 @@ namespace App\Providers;
 // use Illuminate\Support\Facades\Gate;
 
 use App\Models\Bookmark;
+use App\Models\Tag;
 use App\Policies\Api\V1\BookmarkPolicy;
+use App\Policies\Api\V1\TagPolicy;
 use Illuminate\Foundation\Support\Providers\AuthServiceProvider as ServiceProvider;
 
 class AuthServiceProvider extends ServiceProvider
@@ -15,6 +17,7 @@ class AuthServiceProvider extends ServiceProvider
      */
     protected $policies = [
         Bookmark::class => BookmarkPolicy::class,
+        Tag::class => TagPolicy::class,
     ];
 
     /**
