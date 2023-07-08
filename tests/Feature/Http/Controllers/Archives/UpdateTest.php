@@ -46,6 +46,8 @@ class UpdateTest extends TestCase
     /** @test */
     public function bookmark_can_be_added_to_the_archives(): void
     {
+        $this->freezeTime();
+
         $user = User::factory()->create();
 
         $bookmark = Bookmark::factory()

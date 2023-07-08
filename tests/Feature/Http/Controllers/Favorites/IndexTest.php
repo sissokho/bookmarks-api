@@ -30,6 +30,8 @@ class IndexTest extends TestCase
 
         Sanctum::actingAs($user);
 
+        $tag = Tag::factory()->create(['name' => strtolower('Tag One')]);
+
         Bookmark::factory()
             ->count(20)
             ->for($user)
@@ -38,7 +40,7 @@ class IndexTest extends TestCase
 
         $mostRecentBookmark = Bookmark::factory()
             ->for($user)
-            ->has(Tag::factory()->state(['name' => strtolower('Tag One')]))
+            ->hasAttached($tag)
             ->favorite()
             ->create();
 
@@ -56,10 +58,10 @@ class IndexTest extends TestCase
                             ->where('favorite', true)
                             ->where('archived', false)
                             ->where('created_at', $mostRecentBookmark->created_at->toDateTimeString())
-                            ->where('tags.0.id', 1)
-                            ->where('tags.0.name', 'tag one')
-                            ->where('tags.0.slug', 'tag-one')
-                            ->where('tags.0.created_at', now()->toDateTimeString())
+                            ->where('tags.0.id', $tag->id)
+                            ->where('tags.0.name', $tag->name)
+                            ->where('tags.0.slug', $tag->slug)
+                            ->where('tags.0.created_at', $tag->created_at->toDateTimeString())
                     )
             )
             ->assertJson([
@@ -87,13 +89,15 @@ class IndexTest extends TestCase
 
         Sanctum::actingAs($user);
 
+        $tag = Tag::factory()->create(['name' => strtolower('Tag One')]);
+
         Bookmark::factory()
             ->favorite()
             ->create(); // Another user's bookmark
 
         $userBookmark = Bookmark::factory()
             ->for($user)
-            ->has(Tag::factory()->state(['name' => strtolower('Tag One')]))
+            ->hasAttached($tag)
             ->favorite()
             ->create();
 
@@ -111,10 +115,10 @@ class IndexTest extends TestCase
                             ->where('favorite', true)
                             ->where('archived', false)
                             ->where('created_at', $userBookmark->created_at->toDateTimeString())
-                            ->where('tags.0.id', 1)
-                            ->where('tags.0.name', 'tag one')
-                            ->where('tags.0.slug', 'tag-one')
-                            ->where('tags.0.created_at', now()->toDateTimeString())
+                            ->where('tags.0.id', $tag->id)
+                            ->where('tags.0.name', $tag->name)
+                            ->where('tags.0.slug', $tag->slug)
+                            ->where('tags.0.created_at', $tag->created_at->toDateTimeString())
                     )
             );
     }
@@ -126,6 +130,8 @@ class IndexTest extends TestCase
 
         Sanctum::actingAs($user);
 
+        $tag = Tag::factory()->create(['name' => strtolower('Tag One')]);
+
         Bookmark::factory()
             ->for($user)
             ->trashed()
@@ -133,7 +139,7 @@ class IndexTest extends TestCase
 
         $favoriteBookmark = Bookmark::factory()
             ->for($user)
-            ->has(Tag::factory()->state(['name' => strtolower('Tag One')]))
+            ->hasAttached($tag)
             ->favorite()
             ->create();
 
@@ -155,10 +161,10 @@ class IndexTest extends TestCase
                             ->where('favorite', true)
                             ->where('archived', false)
                             ->where('created_at', $favoriteBookmark->created_at->toDateTimeString())
-                            ->where('tags.0.id', 1)
-                            ->where('tags.0.name', 'tag one')
-                            ->where('tags.0.slug', 'tag-one')
-                            ->where('tags.0.created_at', now()->toDateTimeString())
+                            ->where('tags.0.id', $tag->id)
+                            ->where('tags.0.name', $tag->name)
+                            ->where('tags.0.slug', $tag->slug)
+                            ->where('tags.0.created_at', $tag->created_at->toDateTimeString())
                     )
             );
     }
