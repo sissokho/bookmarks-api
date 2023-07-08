@@ -30,6 +30,8 @@ class StoreTest extends TestCase
      */
     public function user_can_create_a_bookmark_without_tags(array $payload): void
     {
+        $this->freezeTime();
+
         $user = User::factory()->create();
 
         Sanctum::actingAs($user);
@@ -62,6 +64,8 @@ class StoreTest extends TestCase
     /** @test */
     public function user_can_create_a_bookmark_with_tags(): void
     {
+        $this->freezeTime();
+
         Sanctum::actingAs(User::factory()->create());
 
         [$phpTag, $laravelTag] = Tag::factory()
