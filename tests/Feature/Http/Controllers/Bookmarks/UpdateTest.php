@@ -94,6 +94,47 @@ class UpdateTest extends TestCase
     /**
      * @test
      *
+     * @dataProvider optionalTagProvider
+     */
+    public function tags_are_optional(?string $payload): void
+    {
+        $user = User::factory()->create();
+
+        $bookmark = Bookmark::factory()
+            ->for($user)
+            ->has(Tag::factory()->state(['name' => strtolower('Tag One')]))
+            ->create();
+
+        Sanctum::actingAs($user);
+
+        $response = $this->patchJson(route('api.v1.bookmarks.update', ['bookmark' => $bookmark]), [
+            'tags' => $payload
+        ]);
+
+        $response->assertOk()
+            ->assertJson([
+                'data' => [
+                    'tags' => [
+                        [
+                            'id' => 1,
+                            'name' => 'tag one',
+                            'slug' => 'tag-one',
+                        ],
+                    ],
+                ],
+            ]);
+
+        $this->assertDatabaseHas('bookmarks', [
+            'id' => $bookmark->id,
+            'title' => Arr::get($payload, 'title') ?? $bookmark->title,
+            'url' => Arr::get($payload, 'url') ?? $bookmark->url,
+            'favorite' => Arr::get($payload, 'favorite') ?? $bookmark->favorite,
+        ]);
+    }
+
+    /**
+     * @test
+     *
      * @dataProvider tagProvider
      */
     public function bookmark_tags_can_be_updated(array|null $payload, array $tagsJson, int $tagsCount): void
@@ -266,11 +307,6 @@ class UpdateTest extends TestCase
                 'tagsJson' => [],
                 'tagsCount' => 0,
             ],
-            'null tags' => [
-                'payload' => null,
-                'tagsJson' => [],
-                'tagsCount' => 0,
-            ],
             'tags added' => [
                 'payload' => ['tag one', 'tag two', 'tag three'],
                 'tagsJson' => [
@@ -322,6 +358,14 @@ class UpdateTest extends TestCase
         ];
     }
 
+    public function optionalTagProvider(): array
+    {
+        return [
+            'tags is null' => [null],
+            'tags is empty string' => [''],
+        ];
+    }
+
     private function validationProvider(): array
     {
         return [
@@ -341,7 +385,7 @@ class UpdateTest extends TestCase
                 'error' => 'must be a valid URL',
             ],
             'url longer than 255 chars' => [
-                'payload' => ['url' => 'https://'.str_repeat('laravel', 256).'.com'],
+                'payload' => ['url' => 'https://' . str_repeat('laravel', 256) . '.com'],
                 'field' => 'url',
                 'error' => 'must not be greater than 255',
             ],

@@ -23,18 +23,16 @@ class StoreTest extends TestCase
         $response->assertUnauthorized();
     }
 
-    /** @test */
-    public function user_can_create_a_bookmark_without_tags(): void
+    /**
+     * @test
+     *
+     * @dataProvider bookmarkWithoutTagsProvider
+     */
+    public function user_can_create_a_bookmark_without_tags(array $payload): void
     {
         $user = User::factory()->create();
 
         Sanctum::actingAs($user);
-
-        $payload = [
-            'title' => '::title::',
-            'url' => 'https://laravel.com',
-            'favorite' => false,
-        ];
 
         $response = $this->postJson(route('api.v1.bookmarks.store'), $payload);
 
@@ -204,16 +202,6 @@ class StoreTest extends TestCase
                 'field' => 'favorite',
                 'error' => 'must be true or false',
             ],
-            'tags is null' => [
-                'payload' => [...$defaultPayload, 'tags' => null],
-                'field' => 'tags',
-                'error' => 'is required',
-            ],
-            'tags is empty string' => [
-                'payload' => [...$defaultPayload, 'tags' => ''],
-                'field' => 'tags',
-                'error' => 'is required',
-            ],
             'tags is not an array' => [
                 'payload' => [...$defaultPayload, 'tags' => '::tag::'],
                 'field' => 'tags',
@@ -222,7 +210,7 @@ class StoreTest extends TestCase
             'tags is an empty array' => [
                 'payload' => [...$defaultPayload, 'tags' => []],
                 'field' => 'tags',
-                'error' => 'is required',
+                'error' => 'must have at least 1 items',
             ],
             'tags not an array of string' => [
                 'payload' => [...$defaultPayload, 'tags' => [['k']]],
@@ -234,6 +222,21 @@ class StoreTest extends TestCase
                 'field' => 'tags.0',
                 'error' => 'must not be greater than 255',
             ],
+        ];
+    }
+
+    private function bookmarkWithoutTagsProvider(): array
+    {
+        $defaultPayload = [
+            'title' => '::title::',
+            'url' => 'https://laravel.com',
+            'favorite' => false,
+        ];
+
+        return [
+            'missing tags' => [$defaultPayload],
+            'tags is null' => [[...$defaultPayload, 'tags' => null]],
+            'tags is empty string' => [[...$defaultPayload, 'tags' => '']],
         ];
     }
 }

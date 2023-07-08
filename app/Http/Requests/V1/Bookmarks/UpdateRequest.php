@@ -20,7 +20,7 @@ class UpdateRequest extends FormRequest
             'title' => ['sometimes', 'required', 'string', 'max:255'],
             'url' => ['sometimes', 'required', 'url', 'max:255'],
             'favorite' => ['sometimes', 'required', 'boolean'],
-            'tags' => ['sometimes', 'nullable', 'array'],
+            'tags' => ['nullable', 'array'],
             'tags.*' => ['string', 'max:255'],
         ];
     }

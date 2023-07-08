@@ -21,7 +21,7 @@ class UpdateController extends Controller
             $bookmark->save();
         }
 
-        if ($request->has('tags')) {
+        if ($request->filled('tags')) {
             $tags = $fetchOrCreateTags($request->collect('tags'));
 
             $bookmark->tags()->sync($tags->pluck('id'));
