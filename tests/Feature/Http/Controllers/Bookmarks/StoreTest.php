@@ -18,7 +18,7 @@ class StoreTest extends TestCase
     /** @test */
     public function user_must_be_authenticated(): void
     {
-        $response = $this->postJson(route('api.v1.bookmarks.store', []));
+        $response = $this->postJson(route('api.v1.bookmarks.store'));
 
         $response->assertUnauthorized();
     }
@@ -190,7 +190,7 @@ class StoreTest extends TestCase
                 'error' => 'must be a valid URL',
             ],
             'url longer than 255 chars' => [
-                'payload' => [...$defaultPayload, 'url' => 'https://'.str_repeat('laravel', 256).'.com'],
+                'payload' => [...$defaultPayload, 'url' => 'https://' . str_repeat('laravel', 256) . '.com'],
                 'field' => 'url',
                 'error' => 'must not be greater than 255',
             ],
