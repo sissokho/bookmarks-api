@@ -177,6 +177,17 @@ class IndexTest extends TestCase
     public function invalidPaginationParameters(): array
     {
         return [
+            'page & per_page are empty' => [
+                'params' => [
+                    'page' => '',
+                    'per_page' => '',
+                ],
+                'errors' => [
+                    'per_page' => 'The per page field must have a value.',
+                    'page' => 'The page field must have a value.',
+                ],
+            ],
+
             'page & per_page are strings' => [
                 'params' => [
                     'page' => '5ju',

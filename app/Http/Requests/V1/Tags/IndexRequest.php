@@ -17,8 +17,8 @@ class IndexRequest extends FormRequest
     public function rules(): array
     {
         return [
-            'per_page' => ['nullable', 'numeric', 'integer', 'min:1', 'max:100'],
-            'page' => ['nullable', 'numeric', 'integer', 'min:1'],
+            'per_page' => ['filled', 'numeric', 'integer', 'min:1', 'max:100'],
+            'page' => ['filled', 'numeric', 'integer', 'min:1'],
         ];
     }
 }
