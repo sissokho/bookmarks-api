@@ -1,12 +1,12 @@
 <?php
 
-use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\Api\V1\Archives;
 use App\Http\Controllers\Api\V1\Auth\ApiKeyRegenerationController;
 use App\Http\Controllers\Api\V1\Auth\RegistrationController;
 use App\Http\Controllers\Api\V1\Bookmarks;
 use App\Http\Controllers\Api\V1\Favorites;
 use App\Http\Controllers\Api\V1\Tags;
+use Illuminate\Support\Facades\Route;
 
 Route::post('/register', RegistrationController::class)->name('register');
 Route::post('/regenerate-api-key', ApiKeyRegenerationController::class)->name('regenerate');

@@ -192,7 +192,7 @@ class StoreTest extends TestCase
                 'error' => 'must be a valid URL',
             ],
             'url longer than 255 chars' => [
-                'payload' => [...$defaultPayload, 'url' => 'https://' . str_repeat('laravel', 256) . '.com'],
+                'payload' => [...$defaultPayload, 'url' => 'https://'.str_repeat('laravel', 256).'.com'],
                 'field' => 'url',
                 'error' => 'must not be greater than 255',
             ],

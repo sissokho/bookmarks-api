@@ -108,7 +108,7 @@ class UpdateTest extends TestCase
         Sanctum::actingAs($user);
 
         $response = $this->patchJson(route('api.v1.bookmarks.update', ['bookmark' => $bookmark]), [
-            'tags' => $payload
+            'tags' => $payload,
         ]);
 
         $response->assertOk()
@@ -385,7 +385,7 @@ class UpdateTest extends TestCase
                 'error' => 'must be a valid URL',
             ],
             'url longer than 255 chars' => [
-                'payload' => ['url' => 'https://' . str_repeat('laravel', 256) . '.com'],
+                'payload' => ['url' => 'https://'.str_repeat('laravel', 256).'.com'],
                 'field' => 'url',
                 'error' => 'must not be greater than 255',
             ],
