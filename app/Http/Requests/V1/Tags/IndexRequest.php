@@ -1,10 +1,10 @@
 <?php
 
-namespace App\Http\Requests\V1;
+namespace App\Http\Requests\V1\Tags;
 
 use Illuminate\Foundation\Http\FormRequest;
 
-class PaginationRequest extends FormRequest
+class IndexRequest extends FormRequest
 {
     public function authorize(): bool
     {
