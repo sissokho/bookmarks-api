@@ -1,6 +1,6 @@
 <?php
 
-namespace Tests\Integration\Mail;
+namespace Tests\Feature\Mail;
 
 use App\Mail\ApiKeyGenerated;
 use Tests\TestCase;
