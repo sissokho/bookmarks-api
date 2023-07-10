@@ -78,7 +78,6 @@ class IndexTest extends TestCase
     /** @test */
     public function only_tags_associated_to_users_bookmarks_are_returned(): void
     {
-        $this->withoutExceptionHandling();
         $user = User::factory()->create();
 
         Sanctum::actingAs($user);
@@ -117,6 +116,47 @@ class IndexTest extends TestCase
                         fn ($json) => $json->where('id', 1)
                             ->where('name', 'tag one')
                             ->where('slug', 'tag-one')
+                            ->etc()
+                    )
+            );
+    }
+
+    /** @test */
+    public function user_can_can_search_through_his_tags(): void
+    {
+        $user = User::factory()->create();
+
+        Sanctum::actingAs($user);
+
+        Bookmark::factory()
+            ->for($user)
+            ->has(
+                Tag::factory()
+                    ->count(3)
+                    ->state(new Sequence(
+                        ['name' => strtolower('Documentation')],
+                        ['name' => strtolower('Portfolio')],
+                        ['name' => strtolower('Project examples')]
+                    ))
+            )
+            ->create();
+
+        $response = $this->getJson(route('api.v1.tags.index', ['search' => 'p']));
+
+        $response->assertOk()
+            ->assertJson(
+                fn (AssertableJson $json) => $json->hasAll(['meta', 'links'])
+                    ->has('data', 2)
+                    ->has(
+                        'data.0',
+                        fn ($json) => $json->where('name', 'portfolio')
+                            ->where('slug', 'portfolio')
+                            ->etc()
+                    )
+                    ->has(
+                        'data.1',
+                        fn ($json) => $json->where('name', 'project examples')
+                            ->where('slug', 'project-examples')
                             ->etc()
                     )
             );
