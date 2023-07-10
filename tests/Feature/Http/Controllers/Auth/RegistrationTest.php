@@ -69,6 +69,25 @@ class RegistrationTest extends TestCase
     }
 
     /** @test */
+    public function email_must_be_unique(): void
+    {
+        User::factory()
+            ->state(['email' => 'john.doe@gmail.com'])
+            ->create();
+
+        $response = $this->postJson(route('api.v1.register'), [
+            'name' => '::name::',
+            'email' => 'john.doe@gmail.com',
+            'password' => 'password',
+        ]);
+
+        $response->assertUnprocessable()
+            ->assertInvalid([
+                'email' => 'The email has already been taken.',
+            ]);
+    }
+
+    /** @test */
     public function fields_must_not_exceed_255_characters(): void
     {
         $response = $this->postJson(route('api.v1.register'), [
