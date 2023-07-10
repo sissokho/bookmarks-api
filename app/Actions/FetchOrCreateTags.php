@@ -17,7 +17,9 @@ class FetchOrCreateTags
     {
         $tags = $tagNames
             ->map(
-                fn (string $tagName) => strtolower(preg_replace('/\s+/', ' ', $tagName))
+                fn (string $tagName) => strtolower(
+                    (string) preg_replace('/\s+/', ' ', $tagName)  // Condense inner spaces into a single one
+                )
             )
             ->unique()
             ->map(

@@ -18,7 +18,7 @@ class ApiKeyRegenerationController extends Controller
         /** @var User|null $user */
         $user = User::where('email', $request->email)->first();
 
-        if (! $user || ! Hash::check(strval($request->validated('password')), $user->password)) {
+        if (! $user || ! Hash::check($request->string('password'), $user->password)) {
             throw ValidationException::withMessages([
                 'email' => 'The provided credentials are incorrect.',
             ]);

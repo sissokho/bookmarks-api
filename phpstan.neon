@@ -9,7 +9,7 @@ parameters:
     level: 9
 
     ignoreErrors:
-        - '#^Parameter \#1 \$string of function strtolower expects string, string\|null given\.$#'
+
 #
 #    excludePaths:
 #        - ./*/*/FileToBeExcluded.php

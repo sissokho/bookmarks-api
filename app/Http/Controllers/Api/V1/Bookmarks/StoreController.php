@@ -19,9 +19,9 @@ class StoreController extends Controller
         if ($request->filled('tags')) {
             $tags = $fetchOrCreateTags($request->collect('tags'));
 
-            $bookmark->tags()->attach($tags->pluck('id'));
+            $bookmark?->tags()->attach($tags->pluck('id'));
 
-            $bookmark->setRelation('tags', $tags);
+            $bookmark?->setRelation('tags', $tags);
         }
 
         return BookmarkResource::make($bookmark);

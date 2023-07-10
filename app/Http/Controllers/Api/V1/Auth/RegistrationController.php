@@ -17,7 +17,7 @@ class RegistrationController extends Controller
         $user = User::create([
             ...$request->safe()->all(),
             'password' => Hash::make(
-                strval($request->validated('password'))
+                $request->string('password')
             ),
         ]);
 
