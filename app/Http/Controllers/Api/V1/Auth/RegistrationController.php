@@ -6,6 +6,7 @@ use App\Actions\GenerateApiKey;
 use App\Http\Controllers\Controller;
 use App\Http\Requests\V1\Auth\RegisterRequest;
 use App\Models\User;
+use DB;
 use Hash;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Response;
@@ -14,14 +15,16 @@ class RegistrationController extends Controller
 {
     public function __invoke(RegisterRequest $request, GenerateApiKey $generateApiKey): JsonResponse
     {
-        $user = User::create([
-            ...$request->safe()->all(),
-            'password' => Hash::make(
-                $request->string('password')
-            ),
-        ]);
+        DB::transaction(function () use ($request, $generateApiKey) {
+            $user = User::create([
+                ...$request->safe()->all(),
+                'password' => Hash::make(
+                    $request->string('password')
+                ),
+            ]);
 
-        $generateApiKey($user);
+            $generateApiKey($user);
+        });
 
         return response()->json(
             ['message' => 'Your account was successfully created. Your api key was sent to your email address.'],

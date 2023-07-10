@@ -7,6 +7,7 @@ use App\Http\Controllers\Controller;
 use App\Http\Requests\V1\Bookmarks\UpdateRequest;
 use App\Http\Resources\V1\BookmarkResource;
 use App\Models\Bookmark;
+use DB;
 use Illuminate\Http\Resources\Json\JsonResource;
 
 class UpdateController extends Controller
@@ -15,21 +16,23 @@ class UpdateController extends Controller
     {
         $this->authorize('update', $bookmark);
 
-        $bookmark->fill($request->only(['title', 'url', 'favorite']));
+        DB::transaction(function () use ($request, $bookmark, $fetchOrCreateTags) {
+            $bookmark->fill($request->only(['title', 'url', 'favorite']));
 
-        if ($bookmark->isDirty()) {
-            $bookmark->save();
-        }
+            if ($bookmark->isDirty()) {
+                $bookmark->save();
+            }
 
-        if ($request->filled('tags')) {
-            $tags = $fetchOrCreateTags($request->collect('tags'));
+            if ($request->filled('tags')) {
+                $tags = $fetchOrCreateTags($request->collect('tags'));
 
-            $bookmark->tags()->sync($tags->pluck('id'));
+                $bookmark->tags()->sync($tags->pluck('id'));
 
-            $bookmark->setRelation('tags', $tags);
-        } else {
-            $bookmark->load('tags');
-        }
+                $bookmark->setRelation('tags', $tags);
+            } else {
+                $bookmark->load('tags');
+            }
+        });
 
         return BookmarkResource::make($bookmark);
     }
