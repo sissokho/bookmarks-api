@@ -217,14 +217,16 @@ class IndexTest extends TestCase
     public function invalidPaginationParameters(): array
     {
         return [
-            'page & per_page are empty' => [
+            'parameters are empty' => [
                 'params' => [
                     'page' => '',
                     'per_page' => '',
+                    'search' => '',
                 ],
                 'errors' => [
                     'per_page' => 'The per page field must have a value.',
                     'page' => 'The page field must have a value.',
+                    'search' => 'The search field must have a value.',
                 ],
             ],
 
@@ -273,6 +275,15 @@ class IndexTest extends TestCase
                 ],
                 'errors' => [
                     'per_page' => 'The per page must not be greater than 100.',
+                ],
+            ],
+
+            'search is not a string' => [
+                'params' => [
+                    'search' => ['::search::'],
+                ],
+                'errors' => [
+                    'search' => 'The search must be a string.',
                 ],
             ],
         ];

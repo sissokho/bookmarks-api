@@ -19,6 +19,7 @@ class IndexRequest extends FormRequest
         return [
             'per_page' => ['filled', 'numeric', 'integer', 'min:1', 'max:100'],
             'page' => ['filled', 'numeric', 'integer', 'min:1'],
+            'search' => ['filled', 'string'],
         ];
     }
 }
