@@ -80,7 +80,7 @@ This is a bookmarks REST API built with Laravel. It allows you to perform variou
 
 1. Create a database
 
-1. Setup a working email driver like [Mailtrap](https://mailtrap.io/). This [tutorial](https://mailtrap.io/blog/send-email-in-laravel) tutorial shows how to set it up with Laravel.
+1. Setup a working email driver like [Mailtrap](https://mailtrap.io/). This [tutorial](https://mailtrap.io/blog/send-email-in-laravel) shows how to set it up with Laravel.
 
 1. Fill in the database and email environment variables in `.env` file
 
